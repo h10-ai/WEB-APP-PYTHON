@@ -1,6 +1,6 @@
-# Lumis — Tech stack explained
+ — Tech stack explained
 
-This document answers one question for every piece of technology in this project: **why this, and not something else?** Each section explains the choice, the alternative we passed on, and a concrete example of why it matters in practice. This is meant to be readable on its own, even without me there to explain it.
+This document answers one question for every piece of technology in this project: **why this, and not something else?** Each section explains the choice, the alternative we passed on, and a concrete example of why it matters in practice.
 
 ---
 
@@ -8,7 +8,7 @@ This document answers one question for every piece of technology in this project
 
 **What it is**: Django is a Python web framework — a large, pre-built toolkit for handling things every web app needs (URLs, database access, user sessions, security) so you don't write them from scratch.
 
-**Why we chose it over alternatives like Flask or FastAPI**: Django comes with a built-in database layer (the ORM), an admin panel, and a clear project structure out of the box. For a solo builder, this means less decision fatigue — Django tells you where things go. Flask gives you more freedom but also more rope to hang yourself with, since you have to choose and wire up every piece yourself.
+**Why we chose it over alternatives like Flask or FastAPI**: Django comes with a built-in database layer (the ORM), an admin panel, and a clear project structure out of the box ., this means less decision fatigue
 
 **Example**: When we build the chat history feature (Step 3), Django's ORM lets us write:
 ```python
@@ -34,7 +34,7 @@ instead of writing raw SQL like `SELECT * FROM chats WHERE user_id = ? ORDER BY 
 
 **Why we chose it over Postgres for now**: Postgres is more powerful and handles many simultaneous users better, but it requires installing and running a separate database server — extra setup, extra moving parts. Since Lumis is currently a solo project, not yet under real multi-user load, SQLite gives the same Django ORM experience with zero infrastructure overhead. We can migrate to Postgres later — Django makes this a config change, not a rewrite — if our hosting platform doesn't persist SQLite files between deploys (something we'll need to verify once we pick Render or Railway).
 
-**Example**: Right now, your entire chat history database is one file: `db.sqlite3`. You can literally copy that file to back up every conversation ever had with Lumis. With Postgres, you'd need a separate backup/export process.
+**Example**: Right now,  entire chat history database is one file: `db.sqlite3`. You can literally copy that file to back up every conversation ever had . With Postgres, you'd need a separate backup/export process.
 
 ---
 
@@ -44,7 +44,7 @@ instead of writing raw SQL like `SELECT * FROM chats WHERE user_id = ? ORDER BY 
 
 **Why we chose this over you holding one shared key**: If you held a single API key on your server, every user's usage would come out of your wallet — a single popular post could bankrupt you in API costs. BYOK shifts that cost to each user, who already gets free Gemini API quota from Google. This directly serves your "keep cost down" goal from day one, not as an afterthought.
 
-**Example**: If 50 students use Lumis simultaneously, with a shared key you'd be paying for all 50 conversations. With BYOK, each student pays nothing extra beyond their own free Gemini quota — your hosting bill stays at $0 regardless of how many people use the app.
+**Example**: If 50 students use chat bot simultaneously, with a shared key you'd be paying for all 50 conversations. With BYOK, each student pays nothing extra beyond their own free Gemini quota — your hosting bill stays at $0 regardless of how many people use the app.
 
 ---
 
@@ -54,7 +54,7 @@ instead of writing raw SQL like `SELECT * FROM chats WHERE user_id = ? ORDER BY 
 
 **Why we chose it over storing keys on your server**: Storing user API keys on your server means you become responsible for securing them — encryption, access control, breach risk. By keeping the key in the browser only, your server never sees it, never stores it, and can never leak it. This is the simplest possible security posture: you can't lose what you never had.
 
-**Example**: A user pastes their Gemini key into Lumis once. The browser remembers it for their next visit (via localStorage) without ever sending it to your database. If your server were ever hacked, there would be no API keys for an attacker to steal — they were never there.
+**Example**: A user pastes their Gemini key into chatbot once. The browser remembers it for their next visit (via localStorage) without ever sending it to your database. If your server were ever hacked, there would be no API keys for an attacker to steal — they were never there.
 
 ---
 
@@ -72,7 +72,7 @@ instead of writing raw SQL like `SELECT * FROM chats WHERE user_id = ? ORDER BY 
 
 **What it is**: A free, browser-built-in speech recognition and text-to-speech feature.
 
-**Why it was the original starting recommendation, and why we moved past it**: It's free and simple, which made it a good "prove the pipeline works" first step. But you decided Speech-to-Speech via Gemini Live is a *crucial* feature, not a nice-to-have — and Web Speech API can't deliver true real-time speech-to-speech quality or the multiple distinct voice options your spec requires. We're keeping this note in the document for context, but the live architecture is now built around Gemini Live API directly, as confirmed.
+**Why it was the original starting recommendation, and why we moved past it**: It's free and simple, which made it a good "prove the pipeline works" first step. But i decided Speech-to-Speech via Gemini Live is a *crucial* feature, not a nice-to-have — and Web Speech API can't deliver true real-time speech-to-speech quality or the multiple distinct voice options your spec requires. We're keeping this note in the document for context, but the live architecture is now built around Gemini Live API directly, as confirmed.
 
 ---
 
